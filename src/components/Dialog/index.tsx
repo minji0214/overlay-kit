@@ -3,8 +3,11 @@ import { FC, ReactNode } from 'react'
 import { DialogOverlay } from './DialogOverlay'
 import { DialogContent } from './DialogContent'
 
-import { Portal } from '@/utils/portal'
 import { useScrollLock } from '@/utils/useScrollLock'
+import { useAnimationState } from '@/hooks/useAnimationState'
+import { useDialogHandlers } from '@/hooks/useDialogHandlers'
+import { Portal } from '@/utils/portal'
+import './DialogRoot.css'
 
 export interface DialogProps {
   open?: boolean
@@ -27,21 +30,12 @@ export const Dialog: FC<DialogProps> = ({
   contentClassName,
   zIndex,
 }) => {
+  const { isVisible, shouldRender } = useAnimationState(open)
+  const { handleClose, handleEscape } = useDialogHandlers({ onOpenChange, closeOnEscape })
+
   useScrollLock(open)
 
-  const handleClose = () => {
-    if (onOpenChange) {
-      onOpenChange(false)
-    }
-  }
-
-  const handleEscape = () => {
-    if (closeOnEscape) {
-      handleClose()
-    }
-  }
-
-  if (!open) {
+  if (!shouldRender) {
     return null
   }
 
@@ -52,10 +46,15 @@ export const Dialog: FC<DialogProps> = ({
     <Portal>
       <DialogOverlay
         onClick={closeOnOverlayClick ? handleClose : undefined}
-        className={overlayClassName}
+        className={`dialog-overlay ${isVisible ? 'dialog-overlay-enter' : 'dialog-overlay-exit'} ${overlayClassName || ''}`}
         style={overlayStyle}
       />
-      <DialogContent onEscape={handleEscape} className={contentClassName} style={contentStyle}>
+      <DialogContent
+        enabled={isVisible}
+        onEscape={handleEscape}
+        className={`dialog-content ${isVisible ? 'dialog-content-enter' : 'dialog-content-exit'} ${contentClassName || ''}`}
+        style={contentStyle}
+      >
         {children}
       </DialogContent>
     </Portal>

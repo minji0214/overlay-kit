@@ -1,9 +1,13 @@
 import { FC, ReactNode, useRef } from 'react'
-import { Portal } from '@/utils/portal'
-import { useScrollLock } from '@/utils/useScrollLock'
-import { useFocusTrap } from '@/utils/useFocusTrap'
+
 import { DialogOverlay } from './DialogOverlay'
 import { DialogContent } from './DialogContent'
+
+import { useScrollLock } from '@/utils/useScrollLock'
+import { useAnimationState } from '@/hooks/useAnimationState'
+import { useDialogHandlers } from '@/hooks/useDialogHandlers'
+import { Portal } from '@/utils/portal'
+import './DialogRoot.css'
 
 interface DialogRootProps {
   open: boolean
@@ -27,23 +31,12 @@ export const DialogRoot: FC<DialogRootProps> = ({
   contentClassName,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null)
-
-  const handleClose = () => {
-    if (onOpenChange) {
-      onOpenChange(false)
-    }
-  }
-
-  const handleEscape = () => {
-    if (closeOnEscape) {
-      handleClose()
-    }
-  }
+  const { isVisible, shouldRender } = useAnimationState(open)
+  const { handleClose, handleEscape } = useDialogHandlers({ onOpenChange, closeOnEscape })
 
   useScrollLock(open)
-  useFocusTrap(contentRef, open, closeOnEscape ? handleEscape : undefined)
 
-  if (!open) {
+  if (!shouldRender) {
     return null
   }
 
@@ -72,13 +65,18 @@ export const DialogRoot: FC<DialogRootProps> = ({
     <Portal>
       <DialogOverlay
         onClick={closeOnOverlayClick ? handleClose : undefined}
-        className={overlayClassName}
+        className={`dialog-overlay ${isVisible ? 'dialog-overlay-enter' : 'dialog-overlay-exit'} ${overlayClassName || ''}`}
         style={overlayStyle}
       />
-      <DialogContent ref={contentRef} className={contentClassName} style={contentStyle}>
+      <DialogContent
+        ref={contentRef}
+        enabled={isVisible}
+        onEscape={closeOnEscape ? handleEscape : undefined}
+        className={`dialog-content ${isVisible ? 'dialog-content-enter' : 'dialog-content-exit'} ${contentClassName || ''}`}
+        style={contentStyle}
+      >
         {children}
       </DialogContent>
     </Portal>
   )
 }
-

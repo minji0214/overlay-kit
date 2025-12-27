@@ -1,4 +1,5 @@
 import { FC, useState } from 'react'
+
 import { DialogProvider, DialogRenderer, dialog, useDialog, Dialog } from '../index'
 import './styles.css'
 
@@ -118,7 +119,9 @@ const MainContent: FC = () => {
                           content: (
                             <div style={{ padding: '24px', backgroundColor: 'white', borderRadius: '8px' }}>
                               <h3>Card {j + 1}에서 열린 다이얼로그</h3>
-                              <p>섹션 {i + 1}의 카드 {j + 1}에서 열렸습니다.</p>
+                              <p>
+                                섹션 {i + 1}의 카드 {j + 1}에서 열렸습니다.
+                              </p>
                             </div>
                           ),
                           overlayClassName: 'demo-overlay',
@@ -160,4 +163,3 @@ const MainContent: FC = () => {
 }
 
 export { App }
-
