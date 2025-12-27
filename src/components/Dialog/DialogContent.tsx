@@ -7,14 +7,15 @@ interface DialogContentProps {
   onEscape?: () => void
   className?: string
   style?: React.CSSProperties
+  enabled?: boolean
 }
 
 export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ children, onEscape, className, style }, ref) => {
+  ({ children, onEscape, className, style, enabled = true }, ref) => {
     const contentRef = useRef<HTMLDivElement>(null)
     const actualRef = (ref || contentRef) as React.RefObject<HTMLDivElement>
 
-    useFocusTrap(actualRef, !!actualRef.current, onEscape)
+    useFocusTrap(actualRef, enabled, onEscape)
 
     return (
       <div ref={actualRef} role="dialog" aria-modal="true" className={className} style={style}>

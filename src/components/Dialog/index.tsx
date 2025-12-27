@@ -75,6 +75,7 @@ export const Dialog: FC<DialogProps> = ({
         style={overlayStyle}
       />
       <DialogContent
+        enabled={isVisible}
         onEscape={handleEscape}
         className={`dialog-content ${isVisible ? 'dialog-content-enter' : 'dialog-content-exit'} ${contentClassName || ''}`}
         style={contentStyle}

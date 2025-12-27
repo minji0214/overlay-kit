@@ -1,7 +1,6 @@
 import { FC, ReactNode, useRef, useState, useEffect } from 'react'
 import { Portal } from '@/utils/portal'
 import { useScrollLock } from '@/utils/useScrollLock'
-import { useFocusTrap } from '@/utils/useFocusTrap'
 import { DialogOverlay } from './DialogOverlay'
 import { DialogContent } from './DialogContent'
 import './DialogRoot.css'
@@ -63,7 +62,6 @@ export const DialogRoot: FC<DialogRootProps> = ({
   }
 
   useScrollLock(open)
-  useFocusTrap(contentRef, shouldRender && isVisible, closeOnEscape ? handleEscape : undefined)
 
   if (!shouldRender) {
     return null
@@ -99,6 +97,8 @@ export const DialogRoot: FC<DialogRootProps> = ({
       />
       <DialogContent
         ref={contentRef}
+        enabled={isVisible}
+        onEscape={closeOnEscape ? handleEscape : undefined}
         className={`dialog-content ${isVisible ? 'dialog-content-enter' : 'dialog-content-exit'} ${contentClassName || ''}`}
         style={contentStyle}
       >
