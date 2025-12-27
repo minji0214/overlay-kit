@@ -5,7 +5,7 @@ A lightweight, headless React library for drawer and dialog components with SSR 
 ## Installation
 
 ```bash
-pnpm add overlay-kit
+pnpm add react-headless-overlay
 ```
 
 ## Features
@@ -32,7 +32,7 @@ pnpm add overlay-kit
 Both are required - without `DialogRenderer`, dialogs won't appear even if you call `dialog()`.
 
 ```tsx
-import { DialogProvider, DialogRenderer } from 'overlay-kit'
+import { DialogProvider, DialogRenderer } from 'react-headless-overlay'
 
 function App() {
   return (
@@ -62,7 +62,7 @@ export default function RootLayout({ children }) {
 Then use `dialog()` function anywhere to open dialogs:
 
 ```tsx
-import { dialog } from 'overlay-kit'
+import { dialog } from 'react-headless-overlay'
 
 function MyComponent() {
   const handleClick = () => {
@@ -84,7 +84,7 @@ function MyComponent() {
 Or use the `useDialog` hook:
 
 ```tsx
-import { useDialog } from 'overlay-kit'
+import { useDialog } from 'react-headless-overlay'
 
 function MyComponent() {
   const { dialog } = useDialog()
@@ -115,7 +115,7 @@ dialog({ content: <div>Dialog</div>, zIndex: 100 })
 ### Standalone Dialog Component
 
 ```tsx
-import { Dialog } from 'overlay-kit'
+import { Dialog } from 'react-headless-overlay'
 import { useState } from 'react'
 
 function App() {
@@ -154,7 +154,7 @@ function App() {
 ### Drawer
 
 ```tsx
-import { Drawer } from 'overlay-kit'
+import { Drawer } from 'react-headless-overlay'
 import { useState } from 'react'
 
 function App() {
