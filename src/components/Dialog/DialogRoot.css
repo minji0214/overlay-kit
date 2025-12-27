@@ -1,0 +1,31 @@
+/* Overlay Animation */
+.dialog-overlay {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.dialog-overlay-enter {
+  opacity: 1;
+}
+
+.dialog-overlay-exit {
+  opacity: 0;
+}
+
+/* Content Animation - Fade + Scale */
+.dialog-content {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.95);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.dialog-content-enter {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.dialog-content-exit {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.95);
+}
+

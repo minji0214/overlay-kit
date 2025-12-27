@@ -14,7 +14,7 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
     const contentRef = useRef<HTMLDivElement>(null)
     const actualRef = (ref || contentRef) as React.RefObject<HTMLDivElement>
 
-    useFocusTrap(actualRef, true, onEscape)
+    useFocusTrap(actualRef, !!actualRef.current, onEscape)
 
     return (
       <div ref={actualRef} role="dialog" aria-modal="true" className={className} style={style}>
