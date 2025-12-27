@@ -24,7 +24,12 @@ pnpm add overlay-kit
 
 ### Global Dialog System (Recommended)
 
-First, wrap your app with `DialogProvider` and add `DialogRenderer`:
+**Important**: To use the global `dialog()` function, you must wrap your app with both `DialogProvider` and `DialogRenderer` in your root layout.
+
+- `DialogProvider`: Manages the dialog state and provides context
+- `DialogRenderer`: Renders the dialogs to the screen
+
+Both are required - without `DialogRenderer`, dialogs won't appear even if you call `dialog()`.
 
 ```tsx
 import { DialogProvider, DialogRenderer } from 'overlay-kit'
@@ -35,6 +40,21 @@ function App() {
       <YourApp />
       <DialogRenderer />
     </DialogProvider>
+  )
+}
+
+// In Next.js App Router, place this in your root layout:
+// app/layout.tsx
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <DialogProvider defaultZIndex={50}>
+          {children}
+          <DialogRenderer />
+        </DialogProvider>
+      </body>
+    </html>
   )
 }
 ```
