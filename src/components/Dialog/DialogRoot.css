@@ -18,7 +18,9 @@
 .dialog-content {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.95);
-  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  transition:
+    opacity 200ms ease-out,
+    transform 200ms ease-out;
 }
 
 .dialog-content-enter {
@@ -30,4 +32,3 @@
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.95);
 }
-
