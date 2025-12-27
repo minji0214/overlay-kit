@@ -1,10 +1,11 @@
-import { FC, ReactNode, useState, useEffect } from 'react'
+import { FC, ReactNode } from 'react'
 
 import { DialogOverlay } from './DialogOverlay'
 import { DialogContent } from './DialogContent'
-import { DIALOG_TRANSITION_DURATION } from './constants'
 
 import { useScrollLock } from '@/utils/useScrollLock'
+import { useAnimationState } from '@/hooks/useAnimationState'
+import { useDialogHandlers } from '@/hooks/useDialogHandlers'
 import { Portal } from '@/utils/portal'
 import './DialogRoot.css'
 
@@ -29,39 +30,10 @@ export const Dialog: FC<DialogProps> = ({
   contentClassName,
   zIndex,
 }) => {
-  const [isVisible, setIsVisible] = useState(false)
-  const [shouldRender, setShouldRender] = useState(false)
-
-  useEffect(() => {
-    if (open) {
-      setShouldRender(true)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsVisible(true)
-        })
-      })
-    } else {
-      setIsVisible(false)
-      const timer = setTimeout(() => {
-        setShouldRender(false)
-      }, DIALOG_TRANSITION_DURATION)
-      return () => clearTimeout(timer)
-    }
-  }, [open])
+  const { isVisible, shouldRender } = useAnimationState(open)
+  const { handleClose, handleEscape } = useDialogHandlers({ onOpenChange, closeOnEscape })
 
   useScrollLock(open)
-
-  const handleClose = () => {
-    if (onOpenChange) {
-      onOpenChange(false)
-    }
-  }
-
-  const handleEscape = () => {
-    if (closeOnEscape) {
-      handleClose()
-    }
-  }
 
   if (!shouldRender) {
     return null

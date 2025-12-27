@@ -1,10 +1,11 @@
-import { FC, ReactNode, useRef, useState, useEffect } from 'react'
+import { FC, ReactNode, useRef } from 'react'
 
 import { DialogOverlay } from './DialogOverlay'
 import { DialogContent } from './DialogContent'
-import { DIALOG_TRANSITION_DURATION } from './constants'
 
 import { useScrollLock } from '@/utils/useScrollLock'
+import { useAnimationState } from '@/hooks/useAnimationState'
+import { useDialogHandlers } from '@/hooks/useDialogHandlers'
 import { Portal } from '@/utils/portal'
 import './DialogRoot.css'
 
@@ -30,39 +31,8 @@ export const DialogRoot: FC<DialogRootProps> = ({
   contentClassName,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-  const [shouldRender, setShouldRender] = useState(false)
-
-  useEffect(() => {
-    if (open) {
-      setShouldRender(true)
-      // 다음 프레임에서 애니메이션 시작
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsVisible(true)
-        })
-      })
-    } else {
-      setIsVisible(false)
-      // 애니메이션 완료 후 DOM에서 제거
-      const timer = setTimeout(() => {
-        setShouldRender(false)
-      }, DIALOG_TRANSITION_DURATION)
-      return () => clearTimeout(timer)
-    }
-  }, [open])
-
-  const handleClose = () => {
-    if (onOpenChange) {
-      onOpenChange(false)
-    }
-  }
-
-  const handleEscape = () => {
-    if (closeOnEscape) {
-      handleClose()
-    }
-  }
+  const { isVisible, shouldRender } = useAnimationState(open)
+  const { handleClose, handleEscape } = useDialogHandlers({ onOpenChange, closeOnEscape })
 
   useScrollLock(open)
 
